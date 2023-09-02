@@ -1,0 +1,35 @@
+open spurce physics data software
+PASCO Capstone like software and modules meant for highs schools and the like
+use a toggle button instead of momentary button 
+
+#check timing accuracy
+run "flasher.py" to upload arduino code // maybe too hard lol
+
+see if windows com ports return info if not, just loop through looking for connection and ping
+
+use glob for pathnames?
+
+trigger from computer too
+
+write separate trigger func
+
+
+use a time (clock) to trigger for X seconds or timeframe
+
+time from inside arduino code
+
+run in background?
+
+# add live plotter
+
+implement windows ver
+
+# parse lines from arduino
+
+implement rest of config file
+
+debug using debugger
+
+long logger as generator?
+
+NASA funcs 
