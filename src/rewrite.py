@@ -1,19 +1,13 @@
-import serial,csv, serial.tools.list_ports
+import serial, serial.tools.list_ports
 from datetime import datetime
 import time
-import os
 import re
 import sys
-from arduinouploader import *
-import logging
-import json
-import platform
 
 verbose = False
 ldebug = True
 verbp = print if verbose else lambda x: None
 debugp = print if ldebug else lambda *x,**y: None
-
 
 
 class SerialLogger:
@@ -63,7 +57,27 @@ class SerialLogger:
             verbp("❌ Failed connection at at port " + port)
         return False
         
-    def reader(self,start=None):
+    def ender(self,conn,start=None):
+        data = []
+        debugp("🐛Beginning reader function🐛") 
+        reading = True
+        while reading == True:
+            line = conn.readline()
+            debugp(line)
+            dline = line.decode('utf-8')
+            debugp(dline)
+            if dline == "end\r\n":
+                end = time.monotonic()
+                debugp("Ended reader")
+                elapsed = end - start
+                debugp(f"Elapsed time:  {elapsed:0.8f} ")  
+                reading  = False
+                return data
+            else:
+                noends = dline[0:][:-2]
+                dupes = noends.split(",")
+                data.append(dupes)
+                reading = True
         pass
 
 
@@ -98,14 +112,8 @@ class SerialLogger:
             dbuff = buff.decode('utf-8')
             if dbuff == "begin\r\n":
                 start = time.monotonic()
-                print("✅ Calling reader from waiter...")
-                if CAj is not False:
-                    CAreader(start)
-                    return
-                else:
-                    reader(start)
-                    return
-
+                verbp("✅ Starting reader")
+                self.ender(start,conn)
             conn.reset_input_buffer()
         except Exception as e:
             print(str(e))
@@ -113,7 +121,7 @@ class SerialLogger:
             sys.exit()
 
 
-            
+           
 
 
 logger = SerialLogger()
