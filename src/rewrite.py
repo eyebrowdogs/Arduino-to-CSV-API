@@ -4,7 +4,7 @@ import time
 import re
 import sys
 
-verbose = False
+verbose = True
 ldebug = True
 verbp = print if verbose else lambda x: None
 debugp = print if ldebug else lambda *x,**y: None
@@ -15,7 +15,6 @@ class SerialLogger:
         self.baud = baud
         self.parity = parity
         self.stopbits = stopbits
-        pass
         #defaul values
         
     def nojson(self):
@@ -29,9 +28,9 @@ class SerialLogger:
         self.livePlotsj = False
         self.timerj = False
 
-    def connector(self,port,tries=4):
+    def connector(self,port,tries=2):
         try:
-            connection = serial.Serial(port,baudrate=self.baud,parity=self.parity,stopbits=self.stopbits)
+            connection = serial.Serial(port,baudrate=self.baud,parity=self.parity,stopbits=self.stopbits,write_timeout=1.0,timeout=1.0)
             connection.reset_input_buffer()
             verbp("✅ Succesful connection at port "+port)
             debugp("🐛Is port " + port + " open?: " + str(connection.is_open),"🐛")
@@ -50,7 +49,7 @@ class SerialLogger:
                     return connection
                 connection.reset_output_buffer()
                 connection.reset_input_buffer() 
-            verbp("❌ Device not running ArduinoDE, upload .ino file to board an try again")
+            verbp("❌ This device is not running ArduinoDE, upload .ino file to board an try again")
             return False
         except Exception as ex:
             debugp(str(ex))
@@ -88,19 +87,23 @@ class SerialLogger:
         if word is not None:
             wordlist = [name[0] for name in port_list if re.search(word, str(name))]
             debugp("🐛Wordlist:",wordlist,"🐛")
-        if rest:
-            restlist = [name[0] for name in port_list if (re.search(word, str(name))) is None]
-            debugp("🐛Restlist:",restlist,"🐛")
+            if rest:
+                restlist = [name[0] for name in port_list if (re.search(word, str(name[0]))) is None]
+                debugp("🐛Restlist:",restlist,"🐛")
+        if word is None:
+            restlist = [name[0] for name in port_list ]
         filteredlist = wordlist+restlist
         if len(filteredlist) == 0:
-            verbose("❌No ports/devices found")
-        debugp("🐛",filteredlist,"🐛")
+            verbose("❌No ports/devices found, cheack word or enable rest")
+        debugp("🐛Filteredlist",filteredlist,"🐛")
 
         for port in filteredlist:
             conn = self.connector(port)
             if conn:
                 debugp("🐛"+conn+"🐛")
                 return conn
+        
+        print("❌ No devide found running ArduinoDE")
             
 
     def MultipleReader(self,connection, timeout=None):
@@ -121,9 +124,4 @@ class SerialLogger:
             sys.exit()
 
 
-           
-
-
-logger = SerialLogger()
-
-logger.autoConnect()
+        

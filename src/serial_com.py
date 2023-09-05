@@ -123,6 +123,7 @@ def waiter2():
         print("❌ Device disconnected")
         sys.exit()
 
+
    
 
 
@@ -186,9 +187,6 @@ def reader(start):
             
 
 def namer():
-    #global timestampFj
-    # if timestampFj is None:
-    #     timestampFj = "%d-%m-%Y-%H:%M:%S"
     now = datetime.now()
     timestamp = str(now.strftime(timestampFj))
     timestamp = presufxr(timestamp)
