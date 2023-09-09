@@ -27,6 +27,9 @@ class SerialLogger:
         self.CAj = False
         self.livePlotsj = False
         self.timerj = False
+    
+    def trigger():
+        pass
 
     def connector(self,port,tries=2):
         try:
@@ -100,28 +103,28 @@ class SerialLogger:
         for port in filteredlist:
             conn = self.connector(port)
             if conn:
-                debugp("🐛"+conn+"🐛")
+                debugp("🐛Good conn in "+port+"🐛")
                 return conn
         
-        print("❌ No devide found running ArduinoDE")
+        print("❌ No device found running ArduinoDE")
             
 
     def MultipleReader(self,connection, timeout=None):
         conn = connection
         verbp("Waiting...")
-        try:
-            buff = conn.readline()
-            #print(buff)
-            dbuff = buff.decode('utf-8')
-            if dbuff == "begin\r\n":
-                start = time.monotonic()
-                verbp("✅ Starting reader")
-                self.ender(start,conn)
-            conn.reset_input_buffer()
-        except Exception as e:
-            print(str(e))
-            print("❌ Device disconnected")
-            sys.exit()
-
+        while True:
+            try:
+                buff = conn.readline()
+                #print(buff)
+                dbuff = buff.decode('utf-8')
+                if dbuff == "begin\r\n":
+                    start = time.monotonic()
+                    verbp("✅ Starting reader")
+                    return self.ender(conn,start)
+                conn.reset_input_buffer()
+            except Exception as e:
+                print(str(e))
+                print("❌ Device disconnected")
+                sys.exit()
 
         
