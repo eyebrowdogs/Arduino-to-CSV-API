@@ -17,5 +17,7 @@ try:
 except Exception:
     pass """
 
-test = csvwriter()
+test = csvwriter("test1","test1",False,True,"%B %d %H:%M:%S",None)
 test.csvWrite("test1",testlist)
+name = test.makeName()
+test.csvWrite(name,testlist)

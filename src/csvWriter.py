@@ -11,19 +11,33 @@ debugp = print if ldebug else lambda *x,**y: None
 
 
 class csvwriter:
-    def __init__(self,prefix=None,sufix=None):
+    def __init__(self,prefix=None,sufix=None,here=False,timeStamp=True,format=None,path=None):
         self.prefix = prefix
         self.sufix = sufix
+        self.here = here
+        self.ts = timeStamp
+        self.format = format
+        self.path = path
 
-    def addEnds(self,name):
-        if self.prefix is not None:
+
+
+    def addEnds(self,name,prefix,sufix): #remove ifs just do
+        """ if self.prefix is not None:
             name = f"{self.prefix} {name}"
         if self.sufix is not None:
-            name = f"{self.sufix} {name}"
+            name = f"{self.sufix} {name}" """
+        if prefix is not None:
+            name = f"{prefix} {name}"
+        if sufix is not None:
+            name = f"{name} {sufix} "
+        return name
+        
+
 
     def getTimestamp(self,format):
         now = datetime.now()
         timestamp = str(now.strftime(format))
+        return timestamp
 
     def pathFormater(self,name,path):
         if path is None: #writes on current path
@@ -39,6 +53,25 @@ class csvwriter:
             #return name
         return name
     
+    def makeName(self):
+        if self.ts and self.format:
+            try:
+                name = self.getTimestamp(self.format)
+            except Exception:
+                pass
+        else:
+            name = "data"
+        
+        if self.prefix or self.sufix is not None:
+            name = self.addEnds(name,self.prefix,self.sufix)
+        
+        if self.here is not False and self.path is not None: #this is wrong lol
+            name = self.pathFormater(name,self.path)
+        
+        return name
+            
+
+
     def csvWrite(self,name,data,mode="w"):
         try:
             with open(name, mode,newline="\n",) as f:
