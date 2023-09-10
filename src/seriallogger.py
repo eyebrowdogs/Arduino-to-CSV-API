@@ -5,28 +5,18 @@ import re
 import sys
 
 verbose = True
-ldebug = True
+ldebug = False
 verbp = print if verbose else lambda x: None
 debugp = print if ldebug else lambda *x,**y: None
 
 
 class SerialLogger:
-    def __init__(self,baud=9600,parity="N",stopbits=1):
+    def __init__(self,baud=9600,parity="N",stopbits=1,verbose=True):
         self.baud = baud
         self.parity = parity
         self.stopbits = stopbits
         #defaul values
         
-    def nojson(self):
-        self.filesPathj = None
-        self.prefixj = None
-        self.sufixj = None
-        self.timestampFj = "%d-%m-%Y-%H:%M:%S"
-        self.baudratej = None
-        self.portj = None
-        self.CAj = False
-        self.livePlotsj = False
-        self.timerj = False
     
     def trigger():
         pass
@@ -83,7 +73,7 @@ class SerialLogger:
         pass
 
 
-    def autoConnect(self,port_list=serial.tools.list_ports.comports(),word=None,rest=True):
+    def autoConnect(self,port_list=serial.tools.list_ports.comports(),word=None,rest=True,ignorelist=None):
         debugp("🐛PortList:",*port_list,"🐛")
         wordlist = []
         restlist = []
@@ -96,8 +86,19 @@ class SerialLogger:
         if word is None:
             restlist = [name[0] for name in port_list ]
         filteredlist = wordlist+restlist
+        debugp("🐛Before ignore",filteredlist)
+        if ignorelist is not None:
+            ignorelist = list(ignorelist)
+            debugp("🐛Ignorelist:",ignorelist,"🐛")
+            #filteredlist = [name for name in filteredlist != ignorelist[:]]
+            #filteredlist = [list(set(filteredlist).intersection(set(ignorelist))) for filteredlist in ignorelist]
+            setfil = set(filteredlist)
+            setign = set(ignorelist)
+            diff = setfil.difference(setign)
+            filteredlist = list(diff)
         if len(filteredlist) == 0:
-            verbose("❌No ports/devices found, cheack word or enable rest")
+            verbp("❌No ports/devices found, check word, ignored list or enable rest")
+            sys.exit(1)
         debugp("🐛Filteredlist",filteredlist,"🐛")
 
         for port in filteredlist:
@@ -109,7 +110,7 @@ class SerialLogger:
         print("❌ No device found running ArduinoDE")
             
 
-    def MultipleReader(self,connection, timeout=None):
+    def MultipleReader(self,connection):
         conn = connection
         verbp("Waiting...")
         while True:

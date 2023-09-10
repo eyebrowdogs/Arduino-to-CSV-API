@@ -4,7 +4,7 @@ import time
 import os
 
 verbose = True
-ldebug = True
+ldebug = False
 verbp = print if verbose else lambda x: None
 debugp = print if ldebug else lambda *x,**y: None
 
@@ -43,8 +43,8 @@ class csvwriter:
         if path is None: #writes on current path
             path = os.path.abspath(os.curdir)  
             name = os.path.join(path,"CSVs",name)+".csv"
-            #return name
-        else: # writes on config key path
+            return name
+        else:
             try:
                 name = os.path.join(path, name)+".csv"
             except Exception as e:
@@ -65,9 +65,9 @@ class csvwriter:
         if self.prefix or self.sufix is not None:
             name = self.addEnds(name,self.prefix,self.sufix)
         
-        if self.here is not False and self.path is not None: #this is wrong lol
+        if self.here is False and self.path is not None:
             name = self.pathFormater(name,self.path)
-        
+        debugp(name)
         return name
             
 

@@ -1,13 +1,10 @@
 {
     "filesPath": null,
-    "prefix": "test1",
-    "sufix": "test1",
+    "prefix": null,
+    "sufix": null,
     "timestampF": "%B %d %H:%M:%S",
     "baudRate": null,
     "port": null,
-    "CA": false,
-    "livePlots": true,
-    "timer": true,
-    "ignoreports":""
+    "ignorePorts":null
     
 }
