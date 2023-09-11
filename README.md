@@ -46,7 +46,7 @@ $ pip install pyserial
 ### Serial logger
 #### New logger
 ```python
-yourlogger = SerialLogger(self,baud=9600,parity="N",stopbits=1,verbose=True)
+yourlogger = SerialLogger(baud=9600,parity="N",stopbits=1,verbose=True)
 ```
 
 #### Autoconnect
