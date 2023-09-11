@@ -1,9 +1,7 @@
+// Code to test data TX & RX 
+// Random values sent to serial port
 
-int trigPin = 7;    // Trigger
-int echoPin = 6;    // Echo
-int buttonPin = 5; // Button
-int redLed = 9;
-int greenLed = 8;
+int buttonPin = D5; // Button
 long duration, cm, inches;
 int loopc = 0;
 int bt;
@@ -11,34 +9,16 @@ int bt;
  
 void setup() {
   Serial.begin (9600);
-  pinMode(trigPin, OUTPUT);
-  pinMode(echoPin, INPUT);
   pinMode(buttonPin, INPUT);
-  pinMode(LED_BUILTIN, OUTPUT);
-  pinMode(redLed,OUTPUT);
-  pinMode(greenLed,OUTPUT);
-  
 }
  
-bool sender() {
- 
-  digitalWrite(greenLed, HIGH);
+void sender() {
 
-  digitalWrite(trigPin, LOW);
-  delayMicroseconds(5);
-  digitalWrite(trigPin, HIGH);
-  delayMicroseconds(10);
-  digitalWrite(trigPin, LOW);
- 
-  pinMode(echoPin, INPUT);
-  float duration = pulseIn(echoPin, HIGH);
- 
- 
-  float cm = (duration/2.0) / 29.1; 
+   int cm = random(70);
   
 
 
-  if (cm>= 50.0){
+  if (cm>= 50){
     Serial.print(loopc);
     Serial.print(",  ");
     Serial.println("NA");
@@ -53,7 +33,6 @@ bool sender() {
   
   loopc = loopc + 1;
   delay(10);
-  digitalWrite(greenLed, LOW);
   
 }
 
@@ -98,11 +77,10 @@ void loop(){
           Serial.println('a');
       }
        }
-      digitalWrite(redLed, HIGH);
       bool state = digitalRead(buttonPin);
       bool debounced = debouncer(state);
       if (debounced==1)
-      { digitalWrite(redLed, LOW);
+      {
         Serial.println("begin");
         delay(250);
       Serial.print("No, ");

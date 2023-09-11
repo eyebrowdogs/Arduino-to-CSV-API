@@ -1,0 +1,7 @@
+*.txt
+
+src/__pycache__/
+
+src/tools/
+
+

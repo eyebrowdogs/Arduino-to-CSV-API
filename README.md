@@ -8,7 +8,7 @@
 - Change timestamp format, prefix, sufix, timed or enumerated output in the config.json file. Alternatively provide your own JSON file as:
 
 ```bash
-$ python3 serial_com.py yourfile.json
+$ python3 main.py yourfile.json
 ```
 Your file must follow this format:
 
@@ -32,8 +32,6 @@ Your file must follow this format:
 - **timestampF**: format string for the timestamp on the filename
 see  [datetime](https://docs.python.org/3/library/datetime.html#strftime-and-strptime-format-codes) documentation or https://strftime.org
 - **baudRate**: bR of connection, default is 9600
-- **CA**: Continuously append. Append on each reading, good for long sessions
-- **timer**: replace counter with milliseconds from the start
 
 Pyserial is need to run, install as follows
 ```bash
