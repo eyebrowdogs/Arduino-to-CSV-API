@@ -1,6 +1,6 @@
 # Arduino To CSV API 
 ### **Save csv files with sensor data on you computer, no shields or additional devices needed**
-
+(pls let me know any problem, i barely know what im doing lol 😬)
 - Serial comm-based Python script and Arduino code. 
 - Automate data collection over Serial Ports, provide your own config and timing
 - Change timestamp format, prefix, sufix, timed or enumerated output in the config.json file. Alternatively provide your own JSON file as:
