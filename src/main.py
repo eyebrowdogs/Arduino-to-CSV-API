@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/local/bin/py
 from seriallogger import SerialLogger
 from csvwriter import csvwriter
 import sys

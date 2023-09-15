@@ -11,6 +11,7 @@ debugp = print if ldebug else lambda *x,**y: None
 
 
 class csvwriter:
+    '''Csv writing abstractions'''
     def __init__(self,prefix=None,sufix=None,here=False,timeStamp=True,format=None,path=None):
         self.prefix = prefix
         self.sufix = sufix
@@ -22,10 +23,7 @@ class csvwriter:
 
 
     def addEnds(self,name,prefix,sufix): #remove ifs just do
-        """ if self.prefix is not None:
-            name = f"{self.prefix} {name}"
-        if self.sufix is not None:
-            name = f"{self.sufix} {name}" """
+        '''concatenates su and prefixes'''
         if prefix is not None:
             name = f"{prefix} {name}"
         if sufix is not None:
@@ -35,11 +33,13 @@ class csvwriter:
 
 
     def getTimestamp(self,format):
+        '''returns formated timestamp'''
         now = datetime.now()
         timestamp = str(now.strftime(format))
         return timestamp
 
     def pathFormater(self,name,path):
+        '''formats generated name to path'''
         if path is None: #writes on current path
             path = os.path.abspath(os.curdir)  
             name = os.path.join(path,"CSVs",name)+".csv"
@@ -54,6 +54,7 @@ class csvwriter:
         return name
     
     def makeName(self):
+        '''generates a filename with previous methods'''
         if self.ts and self.format:
             try:
                 name = self.getTimestamp(self.format)
@@ -73,6 +74,7 @@ class csvwriter:
 
 
     def csvWrite(self,name,data,mode="w"):
+        '''write to file'''
         try:
             with open(name, mode,newline="\n",) as f:
                 print("Writing csv..")

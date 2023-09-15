@@ -11,6 +11,7 @@ debugp = print if ldebug else lambda *x,**y: None
 
 
 class SerialLogger:
+    '''Autoconnect utilities'''
     def __init__(self,baud=9600,parity="N",stopbits=1,verbose=True):
         self.baud = baud
         self.parity = parity
@@ -22,6 +23,7 @@ class SerialLogger:
         pass
 
     def connector(self,port,tries=2):
+        '''tries to connect to a port 'tries' times'''
         try:
             connection = serial.Serial(port,baudrate=self.baud,parity=self.parity,stopbits=self.stopbits,write_timeout=1.0,timeout=1.0)
             connection.reset_input_buffer()
@@ -50,6 +52,7 @@ class SerialLogger:
         return False
         
     def ender(self,conn,start=None):
+        '''looks for the end keyword and ends the reading, retunrs array of data read '''
         data = []
         debugp("🐛Beginning reader function🐛") 
         reading = True
@@ -74,6 +77,7 @@ class SerialLogger:
 
 
     def autoConnect(self,port_list=serial.tools.list_ports.comports(),word=None,rest=True,ignorelist=None):
+        '''Tries to connect to open ports, useful for when port keep changing, takes is a list of ports to scan or ignore'''
         debugp("🐛PortList:",*port_list,"🐛")
         wordlist = []
         restlist = []
@@ -111,6 +115,7 @@ class SerialLogger:
             
 
     def MultipleReader(self,connection):
+        '''Reads multiple values at a time, returns data list'''
         conn = connection
         verbp("Waiting...")
         while True:
